@@ -1,0 +1,65 @@
+Describing what the server must be able to do.
+
+Game steps:
+
+1 - Draw a card
+> Server picks next card in deck
+> Server 'sends' card to next client
+
+2 - Replace card
+> User chooses card to replace (1,2,3,4)
+> User sends a card to top of pile
+
+3 - Use card 'ability'
+> User sends card to top of pile
+> User uses card's ability (abilities should be known by all client, without poll to server)
+
+4 - Ability 1 : look at own card
+
+5 - Ability 2 : Look at anothers card
+
+6 - Ability 3 : blind swap anothers card
+
+7 - Ability 4 : Look then swap with anothers card
+
+8 - End of turn
+> Server prompts all users to see if they have a card same as one on top of pile.
+> Client responds y/n
+> Server asks every (y) user if they want to discard the card
+> Client response Y/N
+
+9 - User calls cambio
+> Game is notified to be stopped once that user has next turn
+
+10 - Cambio is called, or user runs out of cards
+> Game is stopped
+> Each player's cards are shown
+> Server asks all clients for cards numerical value / sum
+> Client responds with total
+> Server adds up all client's totals and displays scores.
+
+11 - Current round is finished
+> server sends 'reset_hand' to each player.
+> Server sends updated player's scores
+> server resets deck and re-shuffles
+
+12 - New round beginning
+> server asks each (connected) client if they want to play next round (30 second timeout)
+> server deals cards to player
+
+13 - Reset game instance
+> client types 'reset' as an option for the game.
+
+14 - Player discards card they already have onto pile (Correct)
+> Client sends card obj to server
+> server checks card passed is equal (in val) to last discarded card
+> server sends (OK) to client
+> Client removes a card from hand
+
+15 - Player discards card they already have onto pile (Incorrect)
+> Client sends card obj to server
+> server checks card passed is equal (in val) to last discarded card
+> server sends (FAIL) to client
+> Client draws a card from top of deck
+
+

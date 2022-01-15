@@ -1,0 +1,4 @@
+class GameGlobals:
+    shutdown = False
+    
+
