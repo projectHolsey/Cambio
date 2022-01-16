@@ -1,11 +1,13 @@
 from Game.GameInstance import GameInstance
 import argparse, sys
 
-# parser = argparse.ArgumentParser(description='Process some integers.')
-# parser.add_argument("foo", ..., required=True)
-# parser.parse_args()
 
-if len(sys.argv) > 1:
-    create_server()
+parser = argparse.ArgumentParser(description='Cambio parameters')
+parser.add_argument('--server', choices=["false", "true"], default="false", type=str.lower)
+args = parser.parse_args()
+
+Instance = GameInstance
+if args.server:
+    GameInstance.start_server()
 else:
-    create_client()
+    GameInstance.start_player()

@@ -5,15 +5,15 @@ class Card:
         self.colour = colour
 
     def return_numeric_value_cambio(self):
-        if self.value is 'ace':
+        if self.value == 'ace':
             return 1
         if any(item is self.value for item in ['jack', 'queen']):
             return 12
-        if self.value is 'king':
-            if self.colour is 'red':
+        if self.value == 'king':
+            if self.colour == 'red':
                 return -1
             return 12
-        if self.value is 'joker':
+        if self.value == 'joker':
             return 0
 
         # by default just return card's value as it's numeric value
