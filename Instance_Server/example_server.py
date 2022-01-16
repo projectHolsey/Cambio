@@ -42,7 +42,7 @@ list_of_clients = []
 
 def clientthread(conn, addr):
     # sends a message to the client whose user object is conn
-    conn.send("Welcome to this chatroom!")
+    conn.send(b"Welcome to this chatroom!")
 
     while True:
         try:
@@ -93,7 +93,7 @@ def remove(connection):
     if connection in list_of_clients:
         list_of_clients.remove(connection)
 
-
+counter = 1
 while True:
     """Accepts a connection request and stores two parameters,
     conn which is a socket object for that user, and addr
@@ -106,7 +106,8 @@ while True:
     list_of_clients.append(conn)
 
     # prints the address of the user that just connected
-    print(addr[0] + " connected")
+    print(addr[0] + " connected, client total: " + str(counter))
+    counter += 1
 
     # creates and individual thread for every user
     # that connects
