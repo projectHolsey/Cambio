@@ -6,7 +6,8 @@ import select
 import sys
 
 from cards.CreateDeck import create_deck
-from Instance_Server.server_code import server
+from cambio_multiplayer.Instance_Server.server_code import server
+from comms_client.client_user_hand import UserHand
 
 # Flask is a lightweight rest API
 app = Flask(__name__)
@@ -37,6 +38,9 @@ class GameInstance:
 
         self.server_ip = str("127.0.0.1")
         self.server_conn.connect((self.server_ip, self.__server_port))
+
+        # Adding resources to the flask api for the client
+        api.add_resource(UserHand, "/card/<int:card_id>")
 
         # now we've an establied connection, the game can reference an IP address for the flask connection
         # Default address / port for flask is below

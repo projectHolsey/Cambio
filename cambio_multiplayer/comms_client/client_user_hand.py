@@ -9,9 +9,9 @@ from flask import Flask
 from flask_restful import Resource, Api, abort, reqparse
 
 
-# Flask is a lightweight rest API
-app = Flask(__name__)
-api = Api(app)
+# # Flask is a lightweight rest API
+# app = Flask(__name__)
+# api = Api(app)
 
 # Can hold up to 4 cards
 user_hand = {}
@@ -64,7 +64,7 @@ class UserHand(Resource):
         user_hand[card_id] = new_card
         return '', 202
 
-api.add_resource(UserHand, "/card/<int:card_id>")
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
