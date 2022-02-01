@@ -20,8 +20,11 @@ class dealer:
         random.shuffle(self.deck)
 
     def deal_card(self):
-        self.disposed.append(self.deck[0])
         return self.deck.pop(0)
+
+    def despose_first_card(self):
+        self.disposed.append(self.deck[0])
+        self.deck.pop(0)
 
 
 class player:
@@ -57,11 +60,12 @@ def main():
         game_player.cards[str(x)] = game_dealer.deal_card()
         x += 1
 
+    game_dealer.despose_first_card()
+
     print()
 
     response = ""
     while not response.lower() == "c" and not response.lower() == "q":
-
 
         print("")
         print("Current disposed card '" + str(game_dealer.disposed[-1]) + "'")
@@ -82,11 +86,16 @@ def main():
         print_cards(game_player, game_dealer)
         game_player.known_cards.remove("5")
 
-        check_dispose_known_card(game_player, new_card, game_dealer)
+        check_if_player_has_card_to_dispose(game_player, game_dealer)
+
+        if len(game_player.cards) == 0:
+            print("Player has no cards left in hand!")
+            break
 
         response = choice()
         if str(response) == "1":
             print("Discarded card : " + str(game_player.cards[x]))
+            game_dealer.disposed.append(game_player.cards[x])
             del(game_player.cards[x])
 
             print_cards(game_player, game_dealer)
@@ -104,6 +113,10 @@ def main():
                 print("Unaccepted entry, please enter another option")
                 print("( Cards Available : " + ",".join(game_player.cards.keys()) + " )")
                 card_swap = input("Enter index of card > ")
+
+            # Add the chosen card to the discard pile
+            game_dealer.disposed.append(game_player.cards[card_swap])
+            # Swap the chosen card with the drawn card
             game_player.cards[card_swap] = drawn_card
 
             if not any(str(card_swap) == x for x in game_player.known_cards):
@@ -111,6 +124,9 @@ def main():
 
                 print_cards(game_player, game_dealer)
                 display_hand(game_player)
+
+
+
 
     print("Value of hand = ")
     x = 0
@@ -120,10 +136,10 @@ def main():
     print(x)
 
 
-def check_dispose_known_card(game_player, new_card, game_dealer):
+def check_if_player_has_card_to_dispose(game_player, game_dealer):
     cards_to_remove = []
     for item in game_player.known_cards:
-        if new_card.value == game_player.cards[str(item)].value:
+        if game_dealer.disposed[-1].value == game_player.cards[str(item)].value:
             # There is a card in the player's hand of equal value to that of the top most discarded
             print(f"Your card ({str(game_player.cards[str(item)])}) is of similar value to card on top of discard pile.\n Do you wish to discard?")
             discard = input("Enter (y)es or (n)o > ")
