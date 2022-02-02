@@ -1,0 +1,10 @@
+What is requested from the client?
+
+1 - Get card information
+2 - End score
+3 - Replace card
+4 - Delete card
+
+What can be given to the client?
+
+1 - New card
