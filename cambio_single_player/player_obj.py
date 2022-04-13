@@ -1,4 +1,7 @@
+
+from collections import OrderedDict
+
 class player:
     def __init__(self):
-        self.cards = {}
+        self.cards = OrderedDict()
         self.known_cards = ["1","2"]

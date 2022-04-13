@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 
 from dealer_obj import dealer
 from player_obj import player
@@ -114,7 +115,8 @@ class gameInstance:
                 # There is a card in the player's hand of equal value to that of the top most discarded
                 print(f"Your card ({str(game_player.cards[str(item)])}) is of similar value to card on top of discard pile.\n Do you wish to discard?")
                 discard = input("Enter (y)es or (n)o > ")
-                while not str(discard).lower() == "y" or str(discard).lower() == "n":
+
+                while not any(x in str(discard).lower() for x in ["y","n"] ):
                     print("Bad entry, please try again")
                     discard = input("Enter (y)es or (n)o > ")
 
@@ -127,6 +129,14 @@ class gameInstance:
                     cards_to_remove.append(str(item))
                     # remove the card from the player's hand
                     del(game_player.cards[str(item)])
+
+                    svd_crd = game_player.cards.popitem()
+
+                    self.display_hand(game_player)
+
+                    game_player.cards[svd_crd[0]] = svd_crd[1]
+                else:
+                    print("Player has chosen not to discard card.")
 
         for item in cards_to_remove:
             game_player.known_cards.remove(item)

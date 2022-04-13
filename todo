@@ -1,8 +1,8 @@
 Single player instance:
 
-- when discarding a new card, the user is still shown a deck of their old hand (confusing)
-
+FIXED 13/04 - when discarding a new card, the user is still shown a deck of their old hand (confusing)
 - When you hit cambio, it will also take into account the NEW card, even though it's not in your hand
+( make the card into a generic base class - inherit from it for a cambio card )
 
 
 - Need to make this into a 2 player experience
