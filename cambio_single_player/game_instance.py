@@ -12,15 +12,15 @@ class gameInstance:
         self.accepted_vals = ["1", "2", "c", "q"]
 
     def start(self):
-        game_dealer = dealer()
+        game_dealer = dealer(True)
         game_dealer.get_cards()
         game_dealer.shuffle_cards()
 
         game_player = player()
-        x = 1
-        while len(game_player.cards) < 4:
-            game_player.cards[str(x)] = game_dealer.deal_card()
-            x += 1
+        for i in range(4):
+            game_player.cards[i] = game_dealer.deal_card()
+            game_player.cards[i].set_player_card()
+
 
         game_dealer.despose_first_card()
 
@@ -44,9 +44,7 @@ class gameInstance:
             game_player.cards[x] = new_card
             print("NEW : " + str(game_player.cards[x]))
 
-            game_player.known_cards.append("5")
             self.print_cards(game_player, game_dealer)
-            game_player.known_cards.remove("5")
 
             self.check_if_player_has_card_to_dispose(game_player, game_dealer)
 
@@ -164,7 +162,8 @@ class gameInstance:
         s = ""
         print(s)
         for key, card in game_player.cards.items():
-            if str(key) == "5":
+
+            if not game_player.cards[key].player_card:
                 s = s + "\t\t\t\t       {}      ".format(str("NEW"))
             else:
                 s = s + "\t        #{}       ".format(key)
@@ -173,7 +172,7 @@ class gameInstance:
 
         s = ""
         for key, card in game_player.cards.items():
-            if str(key) == "5":
+            if not game_player.cards[key].player_card:
                 s = s + "\t\t\t\t ________________"
             else:
                 s = s + "\t ________________"
@@ -182,7 +181,7 @@ class gameInstance:
 
         s = ""
         for key, card in game_player.cards.items():
-            if str(key) == "5":
+            if not game_player.cards[key].player_card:
                 s = s + "\t\t\t\t|                |"
             else:
                 s = s + "\t|                |"
@@ -191,7 +190,7 @@ class gameInstance:
 
         s = ""
         for key, card in game_player.cards.items():
-            if str(key) == "5":
+            if not game_player.cards[key].player_card:
                 if card.value == "10":
                     s = s + "\t\t\t\t|  {}            |".format(card.value)
                 elif any(card.return_numeric_value_cambio() == x for x in [12, 1, -1]):
@@ -229,7 +228,7 @@ class gameInstance:
         s = ""
         for key, value in game_player.cards.items():
             if any(str(key) == str(x) for x in game_player.known_cards):
-                if str(key) == "5":
+                if not game_player.cards[key].player_card:
                     s = s + "\t\t\t\t|                |"
                 else:
                     s = s + "\t|                |"
@@ -241,7 +240,7 @@ class gameInstance:
         s = ""
         for key, value in game_player.cards.items():
             if any(str(key) == str(x) for x in game_player.known_cards):
-                if str(key) == "5":
+                if not game_player.cards[key].player_card:
                     s = s + "\t\t\t\t|                |"
                 else:
                     s = s + "\t|                |"
@@ -253,7 +252,7 @@ class gameInstance:
         s = ""
         for key, value in game_player.cards.items():
             if any(str(key) == str(x) for x in game_player.known_cards):
-                if str(key) == "5":
+                if not game_player.cards[key].player_card:
                     s = s + "\t\t\t\t|                |"
                 else:
                     s = s + "\t|                |"
@@ -265,7 +264,7 @@ class gameInstance:
         s = ""
         for key, value in game_player.cards.items():
             if any(str(key) == str(x) for x in game_player.known_cards):
-                if str(key) == "5":
+                if not game_player.cards[key].player_card:
                     s = s + "\t\t\t\t|                |"
                 else:
                     s = s + "\t|                |"
@@ -276,7 +275,7 @@ class gameInstance:
 
         s = ""
         for key, value in game_player.cards.items():
-            if str(key) == "5":
+            if not game_player.cards[key].player_card:
                 if value.suit:
                     val = "\u2664"
                     if str(value.suit).lower() == "hearts":
@@ -319,7 +318,7 @@ class gameInstance:
         s = ""
         for key, value in game_player.cards.items():
             if any(str(key) == str(x) for x in game_player.known_cards):
-                if str(key) == "5":
+                if not game_player.cards[key].player_card:
                     s = s + "\t\t\t\t|                |"
                 else:
                     s = s + "\t|                |"
@@ -331,7 +330,7 @@ class gameInstance:
         s = ""
         for key, value in game_player.cards.items():
             if any(str(key) == str(x) for x in game_player.known_cards):
-                if str(key) == "5":
+                if not game_player.cards[key].player_card:
                     s = s + "\t\t\t\t|                |"
                 else:
                     s = s + "\t|                |"
@@ -343,7 +342,7 @@ class gameInstance:
         s = ""
         for key, value in game_player.cards.items():
             if any(str(key) == str(x) for x in game_player.known_cards):
-                if str(key) == "5":
+                if not game_player.cards[key].player_card:
                     s = s + "\t\t\t\t|                |"
                 else:
                     s = s + "\t|                |"
@@ -355,7 +354,7 @@ class gameInstance:
         s = ""
         for key, value in game_player.cards.items():
             if any(str(key) == str(x) for x in game_player.known_cards):
-                if str(key) == "5":
+                if not game_player.cards[key].player_card:
                     s = s + "\t\t\t\t|                |"
                 else:
                     s = s + "\t|                |"
@@ -366,7 +365,7 @@ class gameInstance:
 
         s = ""
         for key, card in game_player.cards.items():
-            if str(key) == "5":
+            if not game_player.cards[key].player_card:
                 if card.value == "10":
                     s = s + "\t\t\t\t|            {}  |".format(card.value)
                 elif any(card.return_numeric_value_cambio() == x for x in [12, 1, -1]):
@@ -402,7 +401,7 @@ class gameInstance:
 
         s = ""
         for key, value in game_player.cards.items():
-            if str(key) == "5":
+            if not game_player.cards[key].player_card:
                 s = s + "\t\t\t\t ________________"
             else:
                 s = s + "\t ________________"
@@ -412,7 +411,7 @@ class gameInstance:
         s = ""
         for key, card in game_player.cards.items():
             if any(str(key) == str(x) for x in game_player.known_cards):
-                if str(key) == "5":
+                if not game_player.cards[key].player_card:
                     if card.return_numeric_value_cambio() > 10 or card.return_numeric_value_cambio() < 0:
                         s = s + "\t\t\t\t       ({})       ".format(str(card.return_numeric_value_cambio()))
                     else:
