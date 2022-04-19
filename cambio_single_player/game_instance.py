@@ -1,26 +1,32 @@
-import os
-from collections import OrderedDict
-
-from dealer_obj import dealer
+from cambio_multiplayer.dealer.cambio_dealer import cambio_dealer
 from player_obj import player
 
-from cards import CardValuesAndSuits
 
 class gameInstance:
 
     def __init__(self):
         self.accepted_vals = ["1", "2", "c", "q"]
+        self.players = {}
+        self.number_of_players = 1
+        self.game_dealer = cambio_dealer()
+
+    def deal_cards(self):
+
+        for i in range(int(self.number_of_players)):
+            game_player = player()
+            for x in range(4):
+                game_player.cards[x + 1] = self.game_dealer.deal_card()
+                game_player.cards[x + 1].set_player_card()
+            self.players[i + 1] = game_player
+
 
     def start(self):
-        game_dealer = dealer(True)
-        game_dealer.get_cards()
-        game_dealer.shuffle_cards()
+        self.game_dealer.get_cards()
+        self.game_dealer.shuffle_cards()
 
-        game_player = player()
-        for i in range(4):
-            game_player.cards[i] = game_dealer.deal_card()
-            game_player.cards[i].set_player_card()
+        self.choose_number_of_players()
 
+        self.deal_cards()
 
         game_dealer.despose_first_card()
 
@@ -41,8 +47,11 @@ class gameInstance:
             except:
                 print("Out of cards!!")
                 break
-            game_player.cards[x] = new_card
-            print("NEW : " + str(game_player.cards[x]))
+
+            count = len(game_player.cards.keys())
+            game_player.cards[count] = new_card
+
+            print("NEW : " + str(game_player.cards[count]))
 
             self.print_cards(game_player, game_dealer)
 
@@ -54,17 +63,17 @@ class gameInstance:
 
             response = self.choice()
             if str(response) == "1":
-                print("Discarded card : " + str(game_player.cards[x]))
-                game_dealer.disposed.append(game_player.cards[x])
-                del (game_player.cards[x])
+                print("Discarded card : " + str(game_player.cards[count]))
+                game_dealer.disposed.append(game_player.cards[count])
+                del (game_player.cards[count])
 
                 self.print_cards(game_player, game_dealer)
                 self.display_hand(game_player)
 
             if str(response) == "2":
                 # Keep card - remove from hand for time being
-                drawn_card = game_player.cards[x]
-                del (game_player.cards[x])
+                drawn_card = game_player.cards[count]
+                del (game_player.cards[count])
 
                 print("Select card to swap with: ")
                 print("( Cards Available : " + ",".join(game_player.cards.keys()) + " )")
@@ -92,6 +101,22 @@ class gameInstance:
             x += player_card.return_numeric_value_cambio()
         print(x)
 
+    def choose_number_of_players(self):
+        while True:
+            self.number_of_players = input("Enter number of players > ")
+            try:
+                # Convert it into integer
+                val = int(self.number_of_players)
+                if not 0 < val <= 4:
+                    print("Unaccepted entry, requires 1-4 players. Please enter another option")
+                    continue
+
+                # Break out of the input loop
+                self.number_of_players = int(self.number_of_players)
+                break
+            except ValueError:
+                print("Unaccepted entry, enter a number between 1 and 4.")
+
     def choice(self):
         print("")
         print("Choose an option")
@@ -109,9 +134,9 @@ class gameInstance:
     def check_if_player_has_card_to_dispose(self, game_player, game_dealer):
         cards_to_remove = []
         for item in game_player.known_cards:
-            if game_dealer.disposed[-1].value == game_player.cards[str(item)].value:
+            if game_dealer.disposed[-1].value == game_player.cards[int(item)].value:
                 # There is a card in the player's hand of equal value to that of the top most discarded
-                print(f"Your card ({str(game_player.cards[str(item)])}) is of similar value to card on top of discard pile.\n Do you wish to discard?")
+                print(f"Your card ({str(game_player.cards[item])}) is of similar value to card on top of discard pile.\n Do you wish to discard?")
                 discard = input("Enter (y)es or (n)o > ")
 
                 while not any(x in str(discard).lower() for x in ["y","n"] ):
@@ -122,11 +147,11 @@ class gameInstance:
                 if str(discard).lower() == "y":
                     print("Tossing your card to pile")
                     # Append the card to the top of discard pile
-                    game_dealer.disposed.append(game_player.cards[str(item)])
+                    game_dealer.disposed.append(game_player.cards[item])
                     # remove the card from the player's known cards
-                    cards_to_remove.append(str(item))
+                    cards_to_remove.append(item)
                     # remove the card from the player's hand
-                    del(game_player.cards[str(item)])
+                    del(game_player.cards[item])
 
                     svd_crd = game_player.cards.popitem()
 
