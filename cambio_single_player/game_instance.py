@@ -1,3 +1,5 @@
+import os
+
 from cambio_multiplayer.dealer.cambio_dealer import cambio_dealer
 from player_obj import player
 
@@ -10,6 +12,8 @@ class gameInstance:
         self.number_of_players = 1
         self.game_dealer = cambio_dealer()
 
+        self.game_ongoing = False
+
     def deal_cards(self):
 
         for i in range(int(self.number_of_players)):
@@ -17,10 +21,12 @@ class gameInstance:
             for x in range(4):
                 game_player.cards[x + 1] = self.game_dealer.deal_card()
                 game_player.cards[x + 1].set_player_card()
+            game_player.name = game_player.name + str(int(i + 1))
             self.players[i + 1] = game_player
 
 
     def start(self):
+        self.game_ongoing = True
         self.game_dealer.get_cards()
         self.game_dealer.shuffle_cards()
 
@@ -28,78 +34,88 @@ class gameInstance:
 
         self.deal_cards()
 
-        game_dealer.despose_first_card()
+        self.game_dealer.despose_first_card()
 
-        print()
+        while self.game_ongoing:
+            for player_id, player in self.players.items():
 
+                os.system("cls")
+
+                if self.player_turn(player):
+
+                    print("Value of hand = ")
+                    x = 0
+                    for idx, player_card in game_player.cards.items():
+                        print("Card : " + str(player_card))
+                        x += player_card.return_numeric_value_cambio()
+                    print(x)
+
+    def player_turn(self, player):
+        print(f"PLAYER : {player.name}")
         response = ""
-        while not response.lower() == "c" and not response.lower() == "q":
+        # while not response.lower() == "c" and not response.lower() == "q":
 
-            print("")
-            print("Current disposed card '" + str(game_dealer.disposed[-1]) + "'")
-            print("Count of cards left : " + str(len(game_dealer.deck)))
+        print("")
+        print("Current disposed card '" + str(self.game_dealer.disposed[-1]) + "'")
+        print("Count of cards left : " + str(len(self.game_dealer.deck)))
 
-            self.display_hand(game_player)
+        self.display_hand(player)
 
-            new_card = None
-            try:
-                new_card = game_dealer.deal_card()
-            except:
-                print("Out of cards!!")
-                break
+        new_card = None
+        try:
+            new_card = self.game_dealer.deal_card()
+        except:
+            print("Out of cards!!")
+            return False
 
-            count = len(game_player.cards.keys())
-            game_player.cards[count] = new_card
+        count = len(player.cards.keys())
+        player.cards[count] = new_card
 
-            print("NEW : " + str(game_player.cards[count]))
+        print("NEW : " + str(player.cards[count]))
 
-            self.print_cards(game_player, game_dealer)
+        self.print_cards(player, self.game_dealer)
 
-            self.check_if_player_has_card_to_dispose(game_player, game_dealer)
+        self.check_if_player_has_card_to_dispose(player, self.game_dealer)
 
-            if len(game_player.cards) == 0:
-                print("Player has no cards left in hand!")
-                break
+        if len(player.cards) == 0:
+            print("Player has no cards left in hand!")
+            return False
 
-            response = self.choice()
-            if str(response) == "1":
-                print("Discarded card : " + str(game_player.cards[count]))
-                game_dealer.disposed.append(game_player.cards[count])
-                del (game_player.cards[count])
+        response = self.choice()
+        if response.lower() == "c" or response.lower() == "q":
+            return True
 
-                self.print_cards(game_player, game_dealer)
-                self.display_hand(game_player)
+        if str(response) == "1":
+            print("Discarded card : " + str(player.cards[count]))
+            self.game_dealer.disposed.append(player.cards[count])
+            del (player.cards[count])
 
-            if str(response) == "2":
-                # Keep card - remove from hand for time being
-                drawn_card = game_player.cards[count]
-                del (game_player.cards[count])
+            self.print_cards(player, self.game_dealer)
+            self.display_hand(player)
 
-                print("Select card to swap with: ")
-                print("( Cards Available : " + ",".join(game_player.cards.keys()) + " )")
+        if str(response) == "2":
+            # Keep card - remove from hand for time being
+            drawn_card = player.cards[count]
+            del (player.cards[count])
+
+            print("Select card to swap with: ")
+            print("( Cards Available : " + ",".join(player.cards.keys()) + " )")
+            card_swap = input("Enter index of card > ")
+            while not any(str(card_swap) == str(x) for x in player.cards.keys()):
+                print("Unaccepted entry, please enter another option")
+                print("( Cards Available : " + ",".join(player.cards.keys()) + " )")
                 card_swap = input("Enter index of card > ")
-                while not any(str(card_swap) == str(x) for x in game_player.cards.keys()):
-                    print("Unaccepted entry, please enter another option")
-                    print("( Cards Available : " + ",".join(game_player.cards.keys()) + " )")
-                    card_swap = input("Enter index of card > ")
 
-                # Add the chosen card to the discard pile
-                game_dealer.disposed.append(game_player.cards[card_swap])
-                # Swap the chosen card with the drawn card
-                game_player.cards[card_swap] = drawn_card
+            # Add the chosen card to the discard pile
+            self.game_dealer.disposed.append(player.cards[card_swap])
+            # Swap the chosen card with the drawn card
+            player.cards[card_swap] = drawn_card
 
-                if not any(str(card_swap) == x for x in game_player.known_cards):
-                    game_player.known_cards.append(str(card_swap))
+            if not any(str(card_swap) == x for x in player.known_cards):
+                player.known_cards.append(str(card_swap))
 
-                    self.print_cards(game_player, game_dealer)
-                    self.display_hand(game_player)
-
-        print("Value of hand = ")
-        x = 0
-        for idx, player_card in game_player.cards.items():
-            print("Card : " + str(player_card))
-            x += player_card.return_numeric_value_cambio()
-        print(x)
+                self.print_cards(player, self.game_dealer)
+                self.display_hand(player)
 
     def choose_number_of_players(self):
         while True:
@@ -179,7 +195,7 @@ class gameInstance:
             if not any(str(idx) == str(x) for x in game_player.known_cards):
                 print(f"{idx} : ?????")
             else:
-                print(f"{idx} : {item}")
+                print(f"{idx} : {str(item)}")
 
     # Function to print the cards
     def print_cards(self, game_player, game_dealer):

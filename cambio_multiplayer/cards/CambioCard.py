@@ -26,3 +26,6 @@ class CambioCard(Card):
 
     def set_player_card(self):
         self.player_card = True
+
+    def __str__(self):
+        return f"Card : {self.value} of {self.suit} ({self.colour});\tvalue : {self.return_numeric_value_cambio()}"

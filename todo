@@ -1,8 +1,17 @@
-Single player instance:
+Going forward.
 
-FIXED 13/04 - when discarding a new card, the user is still shown a deck of their old hand (confusing)
-- When you hit cambio, it will also take into account the NEW card, even though it's not in your hand
-( make the card into a generic base class - inherit from it for a cambio card )
+Currently making into a multiplayer option
+
+> Display cards is funky again
+> Issue with 'discarding' new card && another player having a card that can also be discarded.
+
+> Everything to do with game_dealer needs to be split so you can make into an online game
 
 
-- Need to make this into a 2 player experience
+
+
+
+
+IDEAS :
+> Whilst everyone else is 'waiting', maybe make an interactable option
+    OR!!! A running chatroom that is shown WHILST a player is doing their turn
