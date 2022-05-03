@@ -20,6 +20,6 @@ class dealer(ABC):
     def deal_card(self):
         return self.deck.pop(0)
 
-    def despose_first_card(self):
+    def dispose_first_card(self):
         self.disposed.append(self.deck[0])
         self.deck.pop(0)

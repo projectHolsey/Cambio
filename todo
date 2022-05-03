@@ -8,7 +8,9 @@ Currently making into a multiplayer option
 > Everything to do with game_dealer needs to be split so you can make into an online game
 
 
-
+BUGS:
+> When disposing a card between rounds, the player also seems to dispose one of the unknown cards too
+    > Line 57 > game_Instance.py
 
 
 
