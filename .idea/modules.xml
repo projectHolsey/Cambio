@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/cambio.iml" filepath="$PROJECT_DIR$/.idea/cambio.iml" />
+      <module fileurl="file://$USER_HOME$/PycharmProjects/code_wars_examples/.idea/code_wars_examples.iml" filepath="$USER_HOME$/PycharmProjects/code_wars_examples/.idea/code_wars_examples.iml" />
     </modules>
   </component>
 </project>
