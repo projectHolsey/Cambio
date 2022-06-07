@@ -1,7 +1,7 @@
 import os
 
 from cambio_multiplayer.dealer.cambio_dealer import cambio_dealer
-from player_obj import player
+from Cambio_game.server.player.PlayerObj import player
 
 
 class gameInstance:
